@@ -23,7 +23,6 @@ export const getFeaturedProducts = async (req, res) => {
 
     if (featuredProducts) {
       return res.status(200).json(JSON.parser(featuredProducts))
-      return res.status(200).json(JSON.parse(featuredProducts))
     }
 
     // if not in redis , fetch from mongodb
@@ -132,19 +131,11 @@ export const toggleFeaturedProduct = async (req, res) => {
     if (product) {
       product.isFeatured = !product.isFeatured
       const updateProduct = await product.save()
-      const updatedProduct = await product.save()
       await updateFeaturedProductCache()
 
       res.status(updateFeaturedProduct)
-      res.status(200).json(updatedProduct)
-    } else {
-      res.status(404).json({ message: "Product not found" })
     }
   } catch (error) {}
-  } catch (error) {
-    console.log("Error in toggle featured product controller", error.message)
-    res.status(500).json({ message: error.message })
-  }
 }
 
 // delete product
@@ -160,10 +151,8 @@ export const deleteProduct = async (req, res) => {
 
     if (product.image) {
       const productId = product.image.split("/").pop().split(".")[0]
-      const publicId = product.image.split("/").pop().split(".")[0]
       try {
         await cloudinary.uploader.destroy(`/products/${publicId}`)
-        await cloudinary.uploader.destroy(`products/${publicId}`)
         console.log("Image deleted from cloudinary")
       } catch (error) {
         console.log("Error in deleting image from cloudinary", error.message)
