@@ -1,7 +1,6 @@
 import { redis } from "../config/redis.config.js"
 import cloudinary from "../config/cloudinary.config.js"
 import Product from "../model/product.model.js"
-import { addAzureParams } from "./../node_modules/mongodb/src/client-side-encryption/providers/azure"
 
 // all products
 export const getAllProducts = async (req, res) => {
